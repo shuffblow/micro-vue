@@ -1,6 +1,7 @@
 import { extend } from "../shared";
 
 let shouldTrack = false;
+let activateEffect;
 class ReactiveEffect{
     private _fn: any;
     deps = [];
@@ -14,7 +15,17 @@ class ReactiveEffect{
 
     run(){
         activateEffect = this;
-        return this._fn()
+        // 1.会收集依赖
+        //  shouldTrack来做区分
+        if(!this.active){
+            return this._fn()
+        }
+        shouldTrack = true;
+        activateEffect = this;
+
+        const result = this._fn()
+        shouldTrack = false;
+        return result;
     }
 
     stop(){
@@ -33,10 +44,12 @@ function cleanupEffect(effect){
     effect.deps.forEach((dep:any) => {
         dep.delete(effect);
     });
+    effect.deps.length = 0;
 }
 
 const targetMap = new Map();
 export function track(target, key) {
+    if(!isTracking()) return;
     //选择set这个数据结构 target -> key -> dep
     let depsMap = targetMap.get(target);
     if(!depsMap){
@@ -79,7 +92,6 @@ export function triggerEffects(dep){
     }
 }
 
-let activateEffect;
 export function effect(fn, options: any = {}) {
     const _effect = new ReactiveEffect(fn, options.scheduler);
     // extend
