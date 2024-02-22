@@ -2,7 +2,8 @@
   "name": "micro-vue",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "lib/guide-micro-vue.cjs.js",
+  "module": "lib/guide-micro-vue.esm.js",
   "license": "MIT",
   "jest": {
     "verbose": true
