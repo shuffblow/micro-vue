@@ -1,3 +1,5 @@
+import typescript from "@rollup/plugin-typescript"
+
 export default{
     input:"./src/index.ts",
     output:[
@@ -12,6 +14,6 @@ export default{
     ],
 
     plugins:[
-        
+        typescript()
     ]
 }

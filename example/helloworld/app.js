@@ -1,3 +1,5 @@
+import { h } from "../../lib/guide-micro-vue.esm.js";
+
 export const App = {
     render(){
         // ui
