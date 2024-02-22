@@ -7,7 +7,8 @@ export function render(vnode, container){
 
 function patch(vnode, container){
     // 去处理组件
-    // 判断是不是element类型
+    // TODO 判断是不是element类型,如何区分是elenment类型还是component类型
+    processElement(vnode, container)
     processComponent(vnode, container);
 }
 
