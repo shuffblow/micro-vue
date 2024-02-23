@@ -1,4 +1,5 @@
 import { isObject } from "../shared";
+import { ShapeFlags } from "../shared/shapeFlags";
 import { createComponentInstance, setupComponent } from "./component";
 
 export function render(vnode, container){
@@ -10,9 +11,10 @@ function patch(vnode, container){
     // 去处理组件
     // TODO 判断是不是element类型,如何区分是elenment类型还是component类型
     // processElement(vnode, container);
-    if(typeof vnode.type === "string"){
+    const {shapeFlag} = vnode;
+    if(shapeFlag & ShapeFlags.ELEMENT){
         processElement(vnode, container);
-    }else if(isObject(vnode.type)){
+    }else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT){
         processComponent(vnode, container);
     }
     
@@ -26,10 +28,10 @@ function mountElement(vnode: any, container: any) {
     const el = (vnode.el = document.createElement(vnode.type));
 
     // string array
-    const {children} = vnode;
-    if(typeof children === "string"){
+    const {children, shapeFlag} = vnode;
+    if(shapeFlag & ShapeFlags.TEXT_CHILDREN){
         el.textContent = children;
-    }else if(Array.isArray(children)){
+    }else if(shapeFlag & ShapeFlags.ARRAY_CHILDREN){
         mountChildren(vnode, el)
     }
 
@@ -37,7 +39,15 @@ function mountElement(vnode: any, container: any) {
     const {props} = vnode;
     for (const key in props) {
         const val = props[key];
-        el.setAttribute(key, val);
+
+        const isOn = (key:string) => /^on[A-Z]/.test(key);
+        if(isOn(key)){
+            const event = key.slice(2).toLowerCase();
+            el.addEventListener(event, val)
+        }else{
+            el.setAttribute(key, val);
+        }
+
     }
 
     container.append(el);
