@@ -11,11 +11,13 @@ export const App = {
                 h(Foo, {
                     // on+Event
                     onAdd(a,b){
-                        console.log(a,b);
+                        console.log("onAdd",a,b);
+                    },
+                    onAddFoo(){
+                        console.log("onAddFoo")
                     }
                 })
             ]
-            // [h("p", {class:"red"}, "hi"), h("p", {class:"blue"}, "micro-vue")]
         );
     },
 
