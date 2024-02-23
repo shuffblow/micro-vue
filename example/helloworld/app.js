@@ -1,7 +1,9 @@
 import { h } from "../../lib/guide-micro-vue.esm.js";
 
+window.self = null;
 export const App = {
     render(){
+        window.self = this;
         // ui
         return h(
             "div", 
@@ -9,8 +11,8 @@ export const App = {
                 id: "root",
                 class: ["red", "hard"],
             },
-            // "hi, " + this.msg
-            [h("p", {class:"red"}, "hi"), h("p", {class:"blue"}, "micro-vue")]
+            "hi, " + this.msg
+            // [h("p", {class:"red"}, "hi"), h("p", {class:"blue"}, "micro-vue")]
         );
     },
 
