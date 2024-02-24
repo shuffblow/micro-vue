@@ -1,4 +1,4 @@
-import { h,createTextVNode } from "../../lib/guide-micro-vue.esm.js";
+import { h,createTextVNode, getCurrentInstance } from "../../lib/guide-micro-vue.esm.js";
 import { Foo } from "./Foo.js";
 window.self = null;
 export const App = {
@@ -21,6 +21,8 @@ export const App = {
     },
 
     setup(){
+        const instance = getCurrentInstance()
+        console.log("App:", instance)
         // composition api
         return {
         }
