@@ -6,7 +6,7 @@ export const Foo = {
     },
     render(){
         const foo = h("p", {}, "foo")
-        console.log(this.$slots)
+        console.log("Foo：",this)
         // 具名插槽，获取到要渲染的元素，获取到要渲染的位置
         // 作用域插槽
         const age = 18;
