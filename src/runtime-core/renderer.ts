@@ -7,7 +7,7 @@ import { Fragment, Text } from "./vnode";
 
 
 export function createRenderer(options) {
-    const { createElement, patchProps, insert } = options;
+    const { hostCreateElement, hostPatchProps, hostInsert  } = options;
 
     function render(vnode, container) {
         // 调用patch方法(方便后续递归处理)
@@ -67,12 +67,38 @@ export function createRenderer(options) {
         console.log("patchElemnt");
         console.log("n1-", n1);
         console.log("n2-", n2);
+
+        const el = (n2.el = n1.el);
+
+        const oldProps = n1.props || {};
+        const newProps = n2.props || {};
+        patchProps(el,oldProps,newProps);
+    }
+
+    function patchProps(el,oldProps,newProps){
+        if(oldProps !== newProps){
+            for (const key in newProps) {
+                const prevProp = oldProps[key];
+                const nextProp = newProps[key]; 
+    
+                if(prevProp !== nextProp){
+                    hostPatchProps(el,key,prevProp,nextProp);
+                }
+            }
+    
+            for(const key in oldProps){
+                if(!(key in newProps)){
+                    hostPatchProps(el,key,oldProps[key],null);
+                }
+            }
+        }
+
     }
 
     function mountElement(vnode: any, container: any, parentComponent) {
 
         // createElement
-        const el = (vnode.el = createElement(vnode.type));
+        const el = (vnode.el = hostCreateElement(vnode.type));
 
         // string array
         const { children, shapeFlag } = vnode;
@@ -87,11 +113,11 @@ export function createRenderer(options) {
         for (const key in props) {
             const val = props[key];
 
-            patchProps(el, key, val)
+            hostPatchProps(el, key, null, val)
 
         }
 
-        insert(el, container)
+        hostInsert(el, container)
     }
 
     function mountChildren(vnode, container, parentComponent) {
