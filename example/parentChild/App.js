@@ -1,5 +1,5 @@
 import { h,ref } from "../../lib/guide-micro-vue.esm.js";
-import { ArrayToText } from "./ArrayToText.js";
+import { ArrayToArray } from "./ArrayToArray.js";
 window.self = null;
 export const App = {
     render(){
@@ -10,7 +10,7 @@ export const App = {
                 tId:1
             },[
                 h("p",{},"主页"),
-                h(ArrayToText)
+                h(ArrayToArray)
             ]
         );
     },
